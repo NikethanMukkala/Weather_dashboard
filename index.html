@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for modern icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Three.js for MagicRings background -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MagicRings WebGL Background -->
+    <div id="magic-rings-bg"></div>
+
+    <div class="app-container">
+        <!-- Search Section -->
+        <header class="search-section glass-panel">
+            <div class="search-box">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="city-input" placeholder="Search for a city..." autocomplete="off">
+            </div>
+            <button id="search-btn">Search</button>
+        </header>
+
+        <!-- Loading State -->
+        <div id="loader" class="loader-wrapper hidden">
+            <div class="loader">
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="text"><span>Loading</span></div>
+              <div class="line"></div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-msg" class="error-msg hidden">
+            <i class="ph ph-warning-circle"></i>
+            <span>City not found. Please try again.</span>
+        </div>
+
+        <!-- Main Weather Content -->
+        <main id="weather-content" class="weather-content hidden">
+            <!-- Current Weather Card -->
+            <section class="current-weather glass-panel">
+                <div class="location-header">
+                    <h1 id="city-name">London</h1>
+                    <p id="current-date">Mon, 15 Aug</p>
+                </div>
+                
+                <div class="weather-primary">
+                    <div class="weather-icon-large" id="current-icon">
+                        ☀️
+                    </div>
+                    <div class="temperature">
+                        <span id="current-temp">22</span>°C
+                    </div>
+                    <div class="weather-condition" id="current-condition">Clear Sky</div>
+                </div>
+
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <i class="ph ph-drop"></i>
+                        <div>
+                            <p class="detail-label">Humidity</p>
+                            <p class="detail-value"><span id="humidity">45</span>%</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="ph ph-wind"></i>
+                        <div>
+                            <p class="detail-label">Wind Speed</p>
+                            <p class="detail-value"><span id="wind-speed">12</span> km/h</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="ph ph-thermometer"></i>
+                        <div>
+                            <p class="detail-label">Apparent Temp</p>
+                            <p class="detail-value"><span id="feels-like">21</span>°C</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Forecast Section -->
+            <section class="forecast-section glass-panel">
+                <h2>5-Day Forecast</h2>
+                <div class="forecast-grid" id="forecast-grid">
+                    <!-- Forecast items will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="magic-rings.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

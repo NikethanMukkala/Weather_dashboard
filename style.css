@@ -1,0 +1,749 @@
+/* ============================================
+   LIQUID GLASS DESIGN SYSTEM
+   Inspired by Apple visionOS / Spatial Computing
+   ============================================ */
+
+:root {
+    /* Glass Material */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-hover: rgba(255, 255, 255, 0.12);
+    --glass-bg-active: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --glass-border-hover: rgba(255, 255, 255, 0.35);
+    --glass-highlight: rgba(255, 255, 255, 0.08);
+
+    /* Depth & Shadows */
+    --shadow-float: 
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        0 8px 16px rgba(0, 0, 0, 0.12),
+        0 24px 48px rgba(0, 0, 0, 0.16);
+    --shadow-float-hover:
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 12px 24px rgba(0, 0, 0, 0.15),
+        0 32px 64px rgba(0, 0, 0, 0.2);
+    --shadow-inset: inset 0 1px 1px rgba(255, 255, 255, 0.06);
+    --shadow-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+    /* Typography */
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.55);
+    --text-tertiary: rgba(255, 255, 255, 0.35);
+
+    /* Geometry */
+    --radius-sm: 14px;
+    --radius-md: 22px;
+    --radius-lg: 28px;
+    --radius-xl: 36px;
+
+    /* Fluid Transitions (spring-like) */
+    --transition-spring: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #08081a;
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2.5rem 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+                 system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   MAGIC RINGS BACKGROUND
+   ============================================ */
+#magic-rings-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: auto;
+    filter: blur(3px);
+}
+
+#magic-rings-bg canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.app-container {
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   LIQUID GLASS PANEL
+   The core material — frosted, floating, alive.
+   ============================================ */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(40px) saturate(160%);
+    -webkit-backdrop-filter: blur(40px) saturate(160%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+        var(--shadow-float),
+        var(--shadow-inset),
+        var(--shadow-inset-top);
+    padding: 2rem;
+    transition:
+        background var(--transition-smooth),
+        border-color var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        transform var(--transition-spring);
+    will-change: transform;
+}
+
+.glass-panel:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    box-shadow:
+        var(--shadow-float-hover),
+        var(--shadow-inset),
+        var(--shadow-inset-top);
+    transform: translateY(-2px) scale(1.005);
+}
+
+/* ============================================
+   SEARCH SECTION
+   ============================================ */
+.search-section {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    align-items: center;
+    border-radius: var(--radius-xl);
+}
+
+.search-section:hover {
+    transform: translateY(-1px) scale(1.002);
+}
+
+.search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-inset);
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-smooth),
+        box-shadow var(--transition-smooth);
+}
+
+.search-box:focus-within {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+        var(--shadow-inset),
+        0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.search-box i {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.search-box:focus-within i {
+    color: var(--text-primary);
+}
+
+.search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.search-box input::placeholder {
+    color: var(--text-tertiary);
+    font-weight: 300;
+}
+
+#search-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--text-primary);
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        var(--shadow-inset-top);
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-smooth),
+        transform var(--transition-spring),
+        box-shadow var(--transition-smooth);
+}
+
+#search-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        var(--shadow-inset-top);
+}
+
+#search-btn:active {
+    transform: translateY(0) scale(0.97);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   LOADER (User's original animation)
+   ============================================ */
+.loader-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.loader {
+  --main-size: 4em;
+  --text-color: #ffffff;
+  --shine-color: #ffffff40;
+  --shadow-color: #aaaaaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+  font-size: var(--main-size);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-color);
+  width: 7.3em;
+  height: 1em;
+  filter: drop-shadow(0 0 0.05em var(--shine-color));
+}
+
+.loader .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+}
+
+.loader .text:nth-child(1) {
+  clip-path: polygon(0% 0%, 11.11% 0%, 11.11% 100%, 0% 100%);
+  font-size: calc(var(--main-size) / 20);
+  margin-left: -2.1em;
+  opacity: 0.6;
+}
+
+.loader .text:nth-child(2) {
+  clip-path: polygon(11.11% 0%, 22.22% 0%, 22.22% 100%, 11.11% 100%);
+  font-size: calc(var(--main-size) / 16);
+  margin-left: -0.98em;
+  opacity: 0.7;
+}
+
+.loader .text:nth-child(3) {
+  clip-path: polygon(22.22% 0%, 33.33% 0%, 33.33% 100%, 22.22% 100%);
+  font-size: calc(var(--main-size) / 13);
+  margin-left: -0.33em;
+  opacity: 0.8;
+}
+
+.loader .text:nth-child(4) {
+  clip-path: polygon(33.33% 0%, 44.44% 0%, 44.44% 100%, 33.33% 100%);
+  font-size: calc(var(--main-size) / 11);
+  margin-left: -0.05em;
+  opacity: 0.9;
+}
+
+.loader .text:nth-child(5) {
+  clip-path: polygon(44.44% 0%, 55.55% 0%, 55.55% 100%, 44.44% 100%);
+  font-size: calc(var(--main-size) / 10);
+  margin-left: 0em;
+  opacity: 1;
+}
+
+.loader .text:nth-child(6) {
+  clip-path: polygon(55.55% 0%, 66.66% 0%, 66.66% 100%, 55.55% 100%);
+  font-size: calc(var(--main-size) / 11);
+  margin-left: 0.05em;
+  opacity: 0.9;
+}
+
+.loader .text:nth-child(7) {
+  clip-path: polygon(66.66% 0%, 77.77% 0%, 77.77% 100%, 66.66% 100%);
+  font-size: calc(var(--main-size) / 13);
+  margin-left: 0.33em;
+  opacity: 0.8;
+}
+
+.loader .text:nth-child(8) {
+  clip-path: polygon(77.77% 0%, 88.88% 0%, 88.88% 100%, 77.77% 100%);
+  font-size: calc(var(--main-size) / 16);
+  margin-left: 0.98em;
+  opacity: 0.7;
+}
+
+.loader .text:nth-child(9) {
+  clip-path: polygon(88.88% 0%, 100% 0%, 100% 100%, 88.88% 100%);
+  font-size: calc(var(--main-size) / 20);
+  margin-left: 2.1em;
+  opacity: 0.6;
+}
+
+.loader .text span {
+  animation:
+    scrolling 2s cubic-bezier(0.1, 0.6, 0.9, 0.4) infinite,
+    shadow 2s cubic-bezier(0.1, 0.6, 0.9, 0.4) infinite;
+}
+
+.loader .text:nth-child(1) span {
+  background: linear-gradient(to right, var(--text-color) 4%, var(--shadow-color) 7%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(2) span {
+  background: linear-gradient(to right, var(--text-color) 9%, var(--shadow-color) 13%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(3) span {
+  background: linear-gradient(to right, var(--text-color) 15%, var(--shadow-color) 18%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(4) span {
+  background: linear-gradient(to right, var(--text-color) 20%, var(--shadow-color) 23%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(6) span {
+  background: linear-gradient(to right, var(--shadow-color) 29%, var(--text-color) 32%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(7) span {
+  background: linear-gradient(to right, var(--shadow-color) 34%, var(--text-color) 37%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(8) span {
+  background: linear-gradient(to right, var(--shadow-color) 39%, var(--text-color) 42%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .text:nth-child(9) span {
+  background: linear-gradient(to right, var(--shadow-color) 45%, var(--text-color) 48%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.loader .line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: 0.05em;
+  width: calc(var(--main-size) / 2);
+  margin-top: 0.9em;
+  border-radius: 0.05em;
+}
+
+.loader .line::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--text-color);
+  opacity: 0.3;
+}
+
+.loader .line::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--text-color);
+  border-radius: 0.05em;
+  transform: translateX(-90%);
+  animation: wobble 2s cubic-bezier(0.5, 0.8, 0.5, 0.2) infinite;
+}
+
+@keyframes wobble {
+  0% { transform: translateX(-90%); }
+  50% { transform: translateX(90%); }
+  100% { transform: translateX(-90%); }
+}
+
+@keyframes scrolling {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes shadow {
+  0% { background-position: -98% 0; }
+  100% { background-position: 102% 0; }
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+.error-msg {
+    background: rgba(255, 59, 48, 0.12);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 59, 48, 0.25);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255, 180, 170, 0.95);
+    box-shadow:
+        0 4px 12px rgba(255, 59, 48, 0.08),
+        var(--shadow-inset);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   WEATHER CONTENT — Fade-in entrance
+   ============================================ */
+.weather-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    animation: liquidFadeIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes liquidFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* ============================================
+   CURRENT WEATHER CARD
+   ============================================ */
+.current-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.75rem;
+    padding: 2.5rem 2rem;
+}
+
+.location-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+}
+
+.location-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.weather-primary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.weather-icon-large {
+    font-size: 5rem;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.25));
+    transition: transform var(--transition-spring);
+}
+
+.current-weather:hover .weather-icon-large {
+    transform: scale(1.08) translateY(-4px);
+}
+
+.temperature {
+    font-size: 4.5rem;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+}
+
+.temperature span {
+    font-weight: 200;
+}
+
+.weather-condition {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    text-transform: capitalize;
+    margin-top: 0.35rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* Weather Details — Inner glass sub-panel */
+.weather-details {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-inset);
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-smooth);
+}
+
+.weather-details:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.detail-item i {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.detail-item:hover i {
+    color: var(--text-primary);
+}
+
+.detail-item div {
+    text-align: left;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 0.1rem;
+}
+
+.detail-value {
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+/* ============================================
+   FORECAST SECTION
+   ============================================ */
+.forecast-section {
+    padding: 1.75rem 2rem;
+}
+
+.forecast-section h2 {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+}
+
+.forecast-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.1rem 0.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: var(--shadow-inset);
+    cursor: default;
+    transition:
+        background var(--transition-fast),
+        border-color var(--transition-smooth),
+        transform var(--transition-spring),
+        box-shadow var(--transition-smooth);
+}
+
+.forecast-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-6px) scale(1.03);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        var(--shadow-inset),
+        var(--shadow-inset-top);
+}
+
+.forecast-day {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.forecast-icon {
+    font-size: 2rem;
+    transition: transform var(--transition-spring);
+}
+
+.forecast-item:hover .forecast-icon {
+    transform: scale(1.15);
+}
+
+.forecast-temp {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 1.25rem 1rem;
+    }
+
+    .weather-details {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .detail-item {
+        justify-content: center;
+    }
+
+    .forecast-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .location-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .temperature {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-section {
+        flex-direction: column;
+    }
+
+    #search-btn {
+        width: 100%;
+    }
+
+    .current-weather {
+        padding: 1.5rem 1rem;
+    }
+}
